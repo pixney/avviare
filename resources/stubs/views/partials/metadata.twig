@@ -37,7 +37,7 @@
 <meta property="og:description" content="{{ trans(template.meta_description) | default(page.introtext) }}"/>
 <meta property="og:title" content="{{ trans(template.meta_title) | default(page.title) }}"/>
 <meta property="og:url" content="{{ url_current() }}"/>
-<meta property="og:image" content="{{ page.ogimage.cropped().fit(1200,630).url() | default(image("theme::images/og.png").url())}}"/>
+<meta property="og:image" content="{{ page.ogimage.cropped().fit(1200,630).url() | default(img("theme::images/og.png").url())}}"/>
 <meta property="og:type" content="website"/>
 {% endblock %}
 
@@ -46,13 +46,13 @@
 <meta name="twitter:site" content="@yourtwitterid">
 <meta name="twitter:title" content="{{ trans(template.meta_title) | default(page.title) }}">
 <meta name="twitter:description" content="{{ trans(template.meta_description) | default(page.introtext) }}">
-<meta name="twitter:image" content="{{page.og_image.cropped().fit(1200,630).url() | default(image("theme::images/og.png").url()) }}"/>
+<meta name="twitter:image" content="{{page.og_image.cropped().fit(1200,630).url() | default(img("theme::images/og.png").url()) }}"/>
 {% endblock %}
 
 
 <!-- Favicon -->
-
 {{ favicons("theme::images/favicon.png") }}
+
 {# <!-- Icon in the highest resolution we need it for -->
 <link rel="icon" sizes="192x192" href="/path/to/icon.png">
 
@@ -64,7 +64,7 @@
 
  <link rel="stylesheet" href="{{mix('css/theme.css')}}">
  
-
+ 
 {{ template.includes.render('head')|raw }}
 
 {# Important!! #}

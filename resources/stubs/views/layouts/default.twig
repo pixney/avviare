@@ -20,15 +20,17 @@
 
 {% include "theme::partials/header" %}
 
-<div id="app">
+<main id="main">
     <div class="container">
 
         {% include "theme::partials/messages" %}
 
         {% block content %}{% endblock %}
 
+        <svg><use xlink:href="#example" /></svg>
+
     </div>
-</div>
+</main>
 
 {% include "theme::partials/footer" %}
 {% include "theme::partials/assets" %}

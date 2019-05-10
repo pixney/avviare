@@ -1,6 +1,30 @@
 {
     "name": "pixney/avviare-extension",
     "type": "streams-addon",
+    "description": "Change how pyrocms themes scaffold",
+    "keywords": [
+        "pyrocms", 
+        "theme",
+        "avviare",
+        "extension"
+    ],
+    "homepage": "https://github.com/pixney/avviare-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pixney AB",
+            "homepage": "http://pixney.com/",
+            "role": "Owner"
+        },
+        {
+            "name": "William Åström",
+            "homepage": "http://pixney.com/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "anomaly/streams-platform": "^1.6"
+    },
     "autoload": {
         "psr-4": {
             "Pixney\\AvviareExtension\\": "src/"

@@ -24,8 +24,15 @@ php artisan addon:install avviare
 
 ### Create a theme
 ```
-php artisan setup:theme mycompany.theme.themename
+php artisan make:theme mycompany.theme.themename
 ``` 
+
+### Use svgs
+```
+npm install svg-spritemap-webpack-plugin
+```
+
+### Use Browsersync
 
 
 

@@ -19,14 +19,14 @@ class Avviare extends Command
      *
      * @var string
      */
-    protected $signature = 'setup:theme {theme} {--shared=}';
+    protected $signature = 'make:theme {theme} {--shared=}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description    = 'Command description';
+    protected $description    = 'Create a new pyrocms theme';
     protected $packageJsonUrl = 'https://raw.githubusercontent.com/laravel/laravel/master/package.json';
     protected $namespace      = '';
     /**
@@ -39,7 +39,8 @@ class Avviare extends Command
         'fonts',
         'scss',
         'sass',
-        'views'
+        'views',
+        'css'
     ];
 
     /**
@@ -51,6 +52,11 @@ class Avviare extends Command
         'sass',
         'js',
         'views'
+    ];
+
+    protected $deleteFiles = [
+        'webpack.mix.js',
+        'package.json'
     ];
 
     /**
@@ -76,10 +82,6 @@ class Avviare extends Command
             throw new \Exception('The namespace should be snake case and formatted this way: {vendor}.{type}.{slug}');
         }
 
-        Artisan::call('make:addon', [
-            'namespace' => $this->namespace
-        ]);
-
         list($vendor, $type, $slug) = array_map(
             function ($value) {
                 return str_slug(strtolower($value), '_');
@@ -87,21 +89,29 @@ class Avviare extends Command
             explode('.', $this->namespace)
         );
 
-        $type = str_singular($type);
-
-        $avviarePath          = $ext->path;
         $path                 = $this->dispatch(new MakeAddonPaths($vendor, $type, $slug, $this));
+        $type                 = str_singular($type);
+        $avviarePath          = $ext->path;
         $resourcesPath        = $path . '/resources/';
         $distPath             = $resourcesPath . 'dist/';
+
+        Artisan::call('make:addon', [
+            'namespace' => $this->namespace
+        ]);
 
         foreach ($this->deleteDirs as $dir) {
             $filesystem->deleteDirectory($resourcesPath . $dir);
             $this->info('Deleted: ' . $resourcesPath . $dir);
         }
+        foreach ($this->deleteFiles as $file) {
+            $filesystem->delete($path . '/' . $file);
+            $this->info('Deleted: ' . $path . '/' . $file);
+        }
         foreach ($this->createDirs as $dir) {
             $filesystem->makeDirectory($resourcesPath . $dir);
             $this->info('Created: ' . $resourcesPath . $dir);
         }
+
         // Copy JS files
         $filesystem->copyDirectory(
             $avviarePath . '/resources/stubs/js',
@@ -122,13 +132,32 @@ class Avviare extends Command
             "{$path}/resources/views"
         );
 
+        // Copy Svg files
+        $filesystem->copyDirectory(
+            $avviarePath . '/resources/stubs/svgs',
+            "{$path}/resources/assets/svgs"
+        );
+
+        // Copy Image files
+        $filesystem->copyDirectory(
+            $avviarePath . '/resources/stubs/images',
+            "{$path}/resources/images"
+        );
+
         if ($this->confirm('Would you like us to automatically set your webpack.mix.js file?')) {
+            $jsPath                    = '.' . str_replace(base_path(), '', $path) . '/resources/js/app.js';
+            $cssPath                   = '.' . str_replace(base_path(), '', $path) . '/resources/sass/theme.scss';
+            $DummySvgSpriteDestination = '.' . str_replace(base_path(), '', $path) . '/resources/views/partials/svgs.twig';
+            $DummySvgSourcePath        = '.' . str_replace(base_path(), '', $path) . '/resources/assets/svgs/*.svg';
+
+            //$filesystem->makeDirectory($resourcesPath . $dir);
             // Get webpack.mix.js stub
             $webpack    = $filesystem->get($avviarePath . '/resources/stubs/webpack.mix.js');
 
-            $webpack    = str_replace('DummyPublicPath', str_replace(base_path(), '.', $distPath), $webpack);
-            $webpack    = str_replace('DummyAppJS', $resourcesPath . 'js/app.js', $webpack);
-            $webpack    = str_replace('DummyAppCSS', $resourcesPath . 'sass/theme.scss', $webpack);
+            $webpack    = str_replace('DummyAppJS', $jsPath, $webpack);
+            $webpack    = str_replace('DummyAppCSS', $cssPath, $webpack);
+            $webpack    = str_replace('DummySvgSpriteDestination', $DummySvgSpriteDestination, $webpack);
+            $webpack    = str_replace('DummySvgSourcePath', $DummySvgSourcePath, $webpack);
             //
             // /Users/williamastrom/Sites/pyrotheme
             $filesystem->put(base_path('webpack.mix.js'), $webpack);
@@ -142,8 +171,6 @@ class Avviare extends Command
             $file = file_get_contents($this->packageJsonUrl);
             $filesystem->put(base_path('package.json'), $file);
         }
-
-        // $this->info('Views copied');
 
         $this->comment("That's it, you are ready to start developing!");
     }
