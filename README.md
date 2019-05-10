@@ -1,10 +1,20 @@
-# Installation
+# About
 
-## Install PyroCMS
-First of all, you need to make sure you install PyroCMS. Follow the instructions on its hompage or [see how i prefer doing it on this page.](https://williamastrom.se/blog/pyrocms-vue-laravel-and-bootstrap-4-get-started-quickly)
+This extension will help you keep the regular laravel structure using mix
+when developing websites/themes with Pyrocms.
 
 
-## Install Avviare
+## How to use it
+
+### Install pyro cms
+```
+composer create-project pyrocms/pyrocms [projectname]
+php artisan install
+```
+
+[Get Started](https://pyrocms.com/documentation/pyrocms/3.7/getting-started/installation)
+
+### Install Avviare
 
 ```
 composer require "pixney/avviare-extension"
@@ -12,14 +22,14 @@ composer dump
 php artisan addon:install avviare
 ``` 
 
-
-
-## Get started
-
-This is how you create your theme:
+### Create a theme
 ```
 php artisan setup:theme mycompany.theme.themename
 ``` 
+
+
+
+
 
 ### After install
 When everything is completed, your theme is ready to be used. Unless you already have, you need to run `npm install` and after completion you can run the regular `npm run watch/prod` commands.
