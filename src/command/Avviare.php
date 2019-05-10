@@ -147,7 +147,7 @@ class Avviare extends Command
         if ($this->confirm('Would you like us to automatically set your webpack.mix.js file?')) {
             $jsPath                    = '.' . str_replace(base_path(), '', $path) . '/resources/js/app.js';
             $cssPath                   = '.' . str_replace(base_path(), '', $path) . '/resources/sass/theme.scss';
-            $DummySvgSpriteDestination = '.' . str_replace(base_path(), '', $path) . '/resources/views/partials/svgs.twig';
+            $DummySvgSpriteDestination = '..' . str_replace(base_path(), '', $path) . '/resources/views/partials/svgs.twig';
             $DummySvgSourcePath        = '.' . str_replace(base_path(), '', $path) . '/resources/assets/svgs/*.svg';
 
             //$filesystem->makeDirectory($resourcesPath . $dir);
