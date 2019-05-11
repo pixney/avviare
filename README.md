@@ -80,3 +80,4 @@ Either to to display->settings within the admin to activate your theme or in you
 
 ### Change the Open Graph and Favicon images
 Within your theme directory, you want to change the images placed within `resources/images`. You can change it's location as well, but if you do make sure you update metadata.twig.
+
