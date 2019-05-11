@@ -1,0 +1,18 @@
+.m-breadcrumb
+{
+    display: flex;
+
+    margin: 0;
+    padding: .5rem;
+
+    list-style: none;
+
+    background: #fafafa;
+
+    &__item:not(:first-child):before 
+    {
+        content:"/";
+        display:inline-block;
+        padding: 0 .2rem 0 0.5rem;
+    }
+}

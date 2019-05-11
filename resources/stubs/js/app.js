@@ -50,6 +50,6 @@ import 'offside-js/dist/offside.css';
 import offside from 'offside-js';
 let myOffside = offside( '#my-menu', {
     slidingElementsSelector:'#my-content-container',
-    buttonsSelector: '#my-button, .another-button',
+    buttonsSelector: '.a-menubutton,.a-closeMenubutton__button',
 });
 

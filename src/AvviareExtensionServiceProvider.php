@@ -22,7 +22,7 @@ class AvviareExtensionServiceProvider extends AddonServiceProvider
     protected $commands = [
         // \Pixney\AvviareExtension\Command\MakeTheme::class,
         \Pixney\AvviareExtension\Command\Avviare::class,
-        \Pixney\AvviareExtension\Command\CopyViews::class
+        //\Pixney\AvviareExtension\Command\CopyViews::class
     ];
 
     /**
@@ -141,7 +141,6 @@ class AvviareExtensionServiceProvider extends AddonServiceProvider
      */
     public function register()
     {
-        
         // Run extra pre-boot registration logic here.
         // Use method injection or commands to bring in services.
     }

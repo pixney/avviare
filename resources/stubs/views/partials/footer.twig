@@ -1,12 +1,19 @@
-<footer>
+<footer class="a-footer">
 
-        <p>
-                &copy;{{ 'now'|date('Y') }} {{ setting_value('streams::name', config_get('streams::distribution.name')) }}.
-        </p>
-        <p>
-                <small>
-                        This theme was created by William Åström of the
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <p>
+                    &copy;{{ 'now'|date('Y') }}
+                    {{ setting_value('streams::name', config_get('streams::distribution.name')) }}.
+                </p>
+                <p>
+                    <small>
                         <a href="https://pixney.com">Swedish Digital Agency Pixney AB.</a>
-                </small>
-        </p>
+                    </small>
+                </p>
+            </div>
+        </div>
+    </div>
+
 </footer>
