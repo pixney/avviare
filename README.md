@@ -12,7 +12,9 @@ composer create-project pyrocms/pyrocms [projectname]
 php artisan install
 ```
 
-[Get Started](https://pyrocms.com/documentation/pyrocms/3.7/getting-started/installation)
+[For more information, see PyroCMS documentation](https://pyrocms.com/documentation/pyrocms/3.7/getting-started/installation)
+
+
 
 ### Install Avviare
 
@@ -23,26 +25,58 @@ php artisan addon:install avviare
 ``` 
 
 ### Create a theme
+Behind the scenes, this will run pyrocms artisan command for scaffolding a theme, then simply remove and replace files to make sure it works the way we want.
 ```
 php artisan make:theme mycompany.theme.themename
 ``` 
 
-### Use svgs
+
+### SVG Spitemaps
+If you use svgs, it's a recommended to create a svg sprite. Install this package and then place your svg's within `resources/svgs`. When you run `npm run watch/production` this plugin will create the svg sprite map for you.
 ```
 npm install svg-spritemap-webpack-plugin
 ```
 
+#### Using an svg within twig files
+Include the spritemap in your view:
+```
+<div style="display:none">
+	{% include "theme::partials/svgs" %}
+</div>
+```
+
+To display the svg :
+
+```
+<svg><use xlink:href="#example" /></svg>
+```
+
 ### Use Browsersync
+Within the webpack.mix.js file, set the proxy and files to watch for:
+
+```
+.browserSync({
+    proxy: 'devsite.test',
+    files: [
+        'public/js/**/*.js',
+        'public/css/**/*.css'
+    ]
+})
+```
 
 
+**If you don't want to use svg sprite plugin or browsersync, simply comment out or remove the reference within webpack.mix.js**
 
 
+## After install
 
-### After install
-When everything is completed, your theme is ready to be used. Unless you already have, you need to run `npm install` and after completion you can run the regular `npm run watch/prod` commands.
+Run `npm install` from the root directory (basepath) to install all the dependencies specified in your `package.json` file.
 
-## Important 1
-Don't forget to visit `settings->display` and make sure you select your new theme as the public one.
+Then you can simply run your normal `npm run watch` or `npm run production` commands.
 
-## Important 2
-Because of some changes in the metadata.twig file, you need to either remove the lines for the favicon and open graph image or add those images. If you don't - then you will experience some issues trying to view your site.
+### Make sure you are using the theme.
+Either to to display->settings within the admin to activate your theme or in your .env file specify:
+`STANDARD_THEME=mycompany.theme.themename`
+
+### Change the Open Graph and Favicon images
+Within your theme directory, you want to change the images placed within `resources/images`. You can change it's location as well, but if you do make sure you update metadata.twig.
