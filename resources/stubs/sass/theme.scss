@@ -16,4 +16,6 @@
 @import "~bootstrap/scss/utilities/flex";
 @import "~bootstrap/scss/utilities/spacing";
 
+@import './theme/atoms/_logo';
+@import './theme/atoms/_menubutton';
 @import './theme/molecules/_messages';

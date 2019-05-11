@@ -1,4 +1,12 @@
 <footer>
-        {#&copy;{{ 'now'|date('Y') }} {{ setting_value('streams::name', 'Your Site') }}, All rights reserved.#}
-        &copy;{{ 'now'|date('Y') }} Your Company, All rights reserved.
+
+        <p>
+                &copy;{{ 'now'|date('Y') }} {{ setting_value('streams::name', config_get('streams::distribution.name')) }}.
+        </p>
+        <p>
+                <small>
+                        This theme was created by William Åström of the
+                        <a href="https://pixney.com">Swedish Digital Agency Pixney AB.</a>
+                </small>
+        </p>
 </footer>

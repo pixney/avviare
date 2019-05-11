@@ -21,16 +21,21 @@
     <div id="app">
 
         {% include "theme::partials/navigation" %}
-        
+
 
         <main id="my-content-container">
-                {% include "theme::partials/header" %}
+            {% include "theme::partials/header" %}
             <div class="container">
                 <div class="row">
                     <div class="col-12">
+                        {% include "theme::partials/breadcrumbs" %}
                         {% include "theme::partials/messages" %}
 
                         {% block content %}{% endblock %}
+
+                        {% if (request_path() == '/') %}
+                        <hr> {% include "theme::partials/posts" %}
+                        {% endif %}
 
                         {% include "theme::partials/footer" %}
                     </div>
