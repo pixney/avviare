@@ -1,0 +1,8 @@
+<section class="m-messages -{{type}}">
+    <svg @click="closeMessages" class="m-messages__close">
+        <use xlink:href="#close" />
+    </svg>
+    {% for message in messages %}
+    {{ trans(message)|markdown }}
+    {% endfor %}
+</section>

@@ -1,0 +1,38 @@
+.m-messages
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    padding: 1rem;
+
+    text-align: left;
+
+    background: #fff;
+
+    &__close
+    {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+
+        width: 30px;
+        height: 30px;
+
+        cursor: pointer;
+
+        fill: #000;
+    }
+
+    &.-error
+    {
+        color: #fff;
+        background-color: red;
+    }
+
+    &.-error &__close
+    {
+        fill: #fff;
+    }
+}

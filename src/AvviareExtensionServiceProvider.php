@@ -21,7 +21,8 @@ class AvviareExtensionServiceProvider extends AddonServiceProvider
      */
     protected $commands = [
         // \Pixney\AvviareExtension\Command\MakeTheme::class,
-        \Pixney\AvviareExtension\Command\Avviare::class
+        \Pixney\AvviareExtension\Command\Avviare::class,
+        \Pixney\AvviareExtension\Command\CopyViews::class
     ];
 
     /**

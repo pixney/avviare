@@ -31,4 +31,25 @@ Vue.component('example-component', ExampleComponent);
 
 const app = new Vue({
     el: '#app',
+    data: function () {
+        return {
+          count: 0
+        }
+      },
+    methods:{
+        closeMessages(){
+            // Find error message container.
+            const messages = document.querySelector(".m-messages");
+            // Remove it
+            messages.remove();
+        }
+    }
 });
+
+import 'offside-js/dist/offside.css';
+import offside from 'offside-js';
+let myOffside = offside( '#my-menu', {
+    slidingElementsSelector:'#my-content-container',
+    buttonsSelector: '#my-button, .another-button',
+});
+
