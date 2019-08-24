@@ -132,6 +132,11 @@ class Create extends Command
             $this->info('Deleted: ' . $themePath . $file);
         }
 
+        $from = $this->extPath . '/resources/stubs/barebone';
+        $to   = "{$themePath}";
+
+        $this->filesystem->copyDirectory($from, $to);
+
         dd();
         // Create new directories
         foreach ($this->wantedDirectories as $dir) {
