@@ -77,6 +77,13 @@ class Create extends Command
     protected $extPath;
 
     /**
+     * Package json file to download
+     *
+     * @var [type]
+     */
+    protected $packageJsonUrl='https://github.com/laravel/laravel/blob/v5.8.16/package.json';
+
+    /**
      * Create a new command instance.
      *
      * @return void
@@ -138,6 +145,11 @@ class Create extends Command
         $to   = "{$themePath}/resources";
 
         $this->filesystem->copyDirectory($from, $to);
+        if ($name === 'barebone') {
+            $this->filesystem->delete(base_path('package.json'));
+            $file = file_get_contents($this->packageJsonUrl);
+            $this->filesystem->put(base_path('package.json'), $file);
+        }
 
         return;
         dd();
@@ -153,7 +165,6 @@ class Create extends Command
         //     "{$themePath}/src/Command"
         // );
 
-        // Copy package.json
         $packagejson    = $this->filesystem->get($this->extPath . '/resources/stubs/package.json');
         $this->filesystem->put(base_path('package.json'), $packagejson);
 
