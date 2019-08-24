@@ -4,7 +4,6 @@ namespace Pixney\AvviareExtension\Command;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Pixney\AvviareExtension\AvviareExtension;
 use Anomaly\Streams\Platform\Application\Application;
@@ -85,9 +84,8 @@ class Create extends Command
     public function __construct()
     {
         parent::__construct();
-        $this->filesystem = app(Filesystem::class);
-        $this->extPath= app(AvviareExtension)->path;
-        $this->path = 
+        $this->filesystem        = app(Filesystem::class);
+        $this->extPath           = app(AvviareExtension)->path;
     }
 
     /**
@@ -110,15 +108,14 @@ class Create extends Command
             explode('.', $this->namespace)
         );
 
-        $path                 = $this->dispatch(new MakeAddonPaths($vendor, $type, $slug, $this));
-        $type                 = str_singular($type);
-        $avviarePath          = $ext->path;
-        $resourcesPath        = $path . '/resources/';
+        $themePath                 = $this->dispatch(new MakeAddonPaths($vendor, $type, $slug, $this));
+        $type                      = str_singular($type);
+        $themeResourcesPath        = $themePath . '/resources/';
 
-        Artisan::call('make:addon', [
+        $this->call('make:addon', [
             'namespace' => $this->namespace
         ]);
-
+        dd();
         // Delete directories
         foreach ($this->unwantedDirectories as $dir) {
             $this->filesystem->deleteDirectory($resourcesPath . $dir);
@@ -127,8 +124,8 @@ class Create extends Command
 
         // Delete Files
         foreach ($this->unwantedFiles as $file) {
-            $this->filesystem->delete($path . $file);
-            $this->info('Deleted: ' . $path . $file);
+            $this->filesystem->delete($themePath . $file);
+            $this->info('Deleted: ' . $themePath . $file);
         }
 
         // Create new directories
@@ -139,55 +136,55 @@ class Create extends Command
 
         // Copy JS files
         $this->filesystem->copyDirectory(
-            $avviarePath . '/resources/stubs/js',
-            "{$path}/resources/js"
+            $this->extPath . '/resources/stubs/js',
+            "{$themePath}/resources/js"
         );
         $this->info('Javascript files copied');
 
         // Copy SCSS files
         $this->filesystem->copyDirectory(
-            $avviarePath . '/resources/stubs/sass',
-            "{$path}/resources/sass"
+            $this->extPath . '/resources/stubs/sass',
+            "{$themePath}/resources/sass"
         );
         $this->info('Sass files copied');
 
         // Copy VIEWS files
         $this->filesystem->copyDirectory(
-            $avviarePath . '/resources/stubs/views',
-            "{$path}/resources/views"
+            $this->extPath . '/resources/stubs/views',
+            "{$themePath}/resources/views"
         );
 
         // Copy Svg files
         $this->filesystem->copyDirectory(
-            $avviarePath . '/resources/stubs/svgs',
-            "{$path}/resources/assets/svgs"
+            $this->extPath . '/resources/stubs/svgs',
+            "{$themePath}/resources/assets/svgs"
         );
 
         // Copy Image files
         $this->filesystem->copyDirectory(
-            $avviarePath . '/resources/stubs/images',
-            "{$path}/resources/images"
+            $this->extPath . '/resources/stubs/images',
+            "{$themePath}/resources/images"
         );
 
         // Copy Command files
         $this->filesystem->copyDirectory(
-            $avviarePath . '/resources/stubs/Command',
-            "{$path}/src/Command"
+            $this->extPath . '/resources/stubs/Command',
+            "{$themePath}/src/Command"
         );
 
         // Copy package.json
-        $packagejson    = $this->filesystem->get($avviarePath . '/resources/stubs/package.json');
+        $packagejson    = $this->filesystem->get($this->extPath . '/resources/stubs/package.json');
         $this->filesystem->put(base_path('package.json'), $packagejson);
 
         if ($this->confirm('Would you like us to automatically set your webpack.mix.js file?')) {
-            $jsPath                    = '.' . str_replace(base_path(), '', $path) . '/resources/js/app.js';
-            $cssPath                   = '.' . str_replace(base_path(), '', $path) . '/resources/sass/theme.scss';
-            $DummySvgSpriteDestination = '..' . str_replace(base_path(), '', $path) . '/resources/views/partials/svgs.twig';
-            $DummySvgSourcePath        = '.' . str_replace(base_path(), '', $path) . '/resources/assets/svgs/*.svg';
+            $jsPath                    = '.' . str_replace(base_path(), '', $themePath) . '/resources/js/app.js';
+            $cssPath                   = '.' . str_replace(base_path(), '', $themePath) . '/resources/sass/theme.scss';
+            $DummySvgSpriteDestination = '..' . str_replace(base_path(), '', $themePath) . '/resources/views/partials/svgs.twig';
+            $DummySvgSourcePath        = '.' . str_replace(base_path(), '', $themePath) . '/resources/assets/svgs/*.svg';
 
             //$this->filesystem->makeDirectory($resourcesPath . $dir);
             // Get webpack.mix.js stub
-            $webpack    = $this->filesystem->get($avviarePath . '/resources/stubs/webpack.mix.js');
+            $webpack    = $this->filesystem->get($this->extPath . '/resources/stubs/webpack.mix.js');
 
             $webpack    = str_replace('DummyAppJS', $jsPath, $webpack);
             $webpack    = str_replace('DummyAppCSS', $cssPath, $webpack);
@@ -201,7 +198,7 @@ class Create extends Command
         //     // Delete webpack
         //     $this->filesystem->delete(base_path('package.json'));
         //     // Copy webpack
-        //     //$this->filesystem->copy($avviarePath . '/resources/stubs/package.json', base_path('package.json'));
+        //     //$this->filesystem->copy($this->extPath . '/resources/stubs/package.json', base_path('package.json'));
         //     $file = file_get_contents($this->packageJsonUrl);
         //     $this->filesystem->put(base_path('package.json'), $file);
         // }
