@@ -81,7 +81,7 @@ class Create extends Command
      *
      * @var [type]
      */
-    protected $packageJsonUrl='https://github.com/laravel/laravel/blob/v5.8.16/package.json';
+    protected $packageJsonUrl='https://raw.githubusercontent.com/laravel/laravel/v5.8.16/package.json';
 
     /**
      * Create a new command instance.
@@ -151,13 +151,13 @@ class Create extends Command
             $this->filesystem->put(base_path('package.json'), $file);
         }
 
-        return;
-        dd();
-        // Create new directories
-        foreach ($this->wantedDirectories as $dir) {
-            $this->filesystem->makeDirectory($themeResourcesPath . $dir);
-            $this->info('Created: ' . $themeResourcesPath . $dir);
-        }
+        // return;
+        // dd();
+        // // Create new directories
+        // foreach ($this->wantedDirectories as $dir) {
+        //     $this->filesystem->makeDirectory($themeResourcesPath . $dir);
+        //     $this->info('Created: ' . $themeResourcesPath . $dir);
+        // }
 
         // Copy Command files
         // $this->filesystem->copyDirectory(
@@ -165,8 +165,8 @@ class Create extends Command
         //     "{$themePath}/src/Command"
         // );
 
-        $packagejson    = $this->filesystem->get($this->extPath . '/resources/stubs/package.json');
-        $this->filesystem->put(base_path('package.json'), $packagejson);
+        //$packagejson    = $this->filesystem->get($this->extPath . '/resources/stubs/package.json');
+        //$this->filesystem->put(base_path('package.json'), $packagejson);
 
         if ($this->confirm('Would you like us to automatically set your webpack.mix.js file?')) {
             $jsPath                    = '.' . str_replace(base_path(), '', $themePath) . '/resources/js/app.js';
