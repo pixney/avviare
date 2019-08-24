@@ -139,16 +139,19 @@ class Create extends Command
             $this->info('Deleted: ' . $themePath . $file);
         }
 
-        $name = strtolower($this->choice('Choose theme?', ['Barebone'], 0));
+        $chosenScaffoldType = strtolower($this->choice('Choose theme?', ['Barebone'], 0));
 
-        $from = $this->extPath . '/resources/stubs/' . $name . '/resources';
+        $from = $this->extPath . "/resources/stubs/{$chosenScaffoldType}/resources";
         $to   = "{$themePath}/resources";
 
         $this->filesystem->copyDirectory($from, $to);
-        if ($name === 'barebone') {
-            $this->filesystem->delete(base_path('package.json'));
-            $file = file_get_contents($this->packageJsonUrl);
-            $this->filesystem->put(base_path('package.json'), $file);
+
+        if ($chosenScaffoldType === 'barebone') {
+            // $this->filesystem->delete(base_path('package.json'));
+            // $file = file_get_contents($this->packageJsonUrl);
+            // $this->filesystem->put(base_path('package.json'), $file);
+            $packagejson    = $this->filesystem->get($this->extPath . "/resources/stubs/{$chosenScaffoldType}/package.json");
+            $this->filesystem->put(base_path('package.json'), $packagejson);
         }
 
         // return;
@@ -176,7 +179,7 @@ class Create extends Command
 
             //$this->filesystem->makeDirectory($themeResourcesPath . $dir);
             // Get webpack.mix.js stub
-            $webpack    = $this->filesystem->get($this->extPath . '/resources/stubs/webpack.mix.js');
+            $webpack    = $this->filesystem->get($this->extPath . "/resources/stubs/{$chosenScaffoldType}/webpack.mix.js");
 
             $webpack    = str_replace('DummyAppJS', $jsPath, $webpack);
             $webpack    = str_replace('DummyAppCSS', $cssPath, $webpack);
