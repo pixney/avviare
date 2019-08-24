@@ -85,7 +85,7 @@ class Create extends Command
     {
         parent::__construct();
         $this->filesystem        = app(Filesystem::class);
-        $this->extPath           = app(AvviareExtension)->path;
+        $this->extPath           = app(AvviareExtension::class)->path;
     }
 
     /**
@@ -107,6 +107,10 @@ class Create extends Command
             },
             explode('.', $this->namespace)
         );
+
+        if ($type !== 'theme') {
+            throw new \Exception('The type has to be theme.');
+        }
 
         $themePath                 = $this->dispatch(new MakeAddonPaths($vendor, $type, $slug, $this));
         $type                      = str_singular($type);

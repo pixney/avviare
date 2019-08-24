@@ -10,7 +10,7 @@ use Pixney\AvviareExtension\AvviareExtension;
 use Anomaly\Streams\Platform\Application\Application;
 use Anomaly\Streams\Platform\Addon\Console\Command\MakeAddonPaths;
 
-class Avviare extends Command
+class delete extends Command
 {
     use DispatchesJobs;
 
