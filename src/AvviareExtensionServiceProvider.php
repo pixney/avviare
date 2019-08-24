@@ -3,6 +3,7 @@
 namespace Pixney\AvviareExtension;
 
 use Illuminate\Routing\Router;
+use Pixney\AvviareExtension\Command\Create;
 use Anomaly\Streams\Platform\Addon\AddonServiceProvider;
 
 class AvviareExtensionServiceProvider extends AddonServiceProvider
@@ -20,8 +21,7 @@ class AvviareExtensionServiceProvider extends AddonServiceProvider
      * @type array|null
      */
     protected $commands = [
-        \Pixney\AvviareExtension\Command\Delete::class,
-        \Pixney\AvviareExtension\Command\Create::class,
+        Create::class
         // \Pixney\AvviareExtension\Command\MakeTheme::class,
         //\Pixney\AvviareExtension\Command\Avviare::class,
         //\Pixney\AvviareExtension\Command\CopyViews::class
