@@ -119,23 +119,24 @@ class Create extends Command
         $this->call('make:addon', [
             'namespace' => $this->namespace
         ]);
-        dd();
-        // Delete directories
+
+        // Delete unwanted directories
         foreach ($this->unwantedDirectories as $dir) {
-            $this->filesystem->deleteDirectory($resourcesPath . $dir);
-            $this->info('Deleted: ' . $resourcesPath . $dir);
+            $this->filesystem->deleteDirectory($themeResourcesPath . $dir);
+            $this->info('Deleted: ' . $themeResourcesPath . $dir);
         }
 
-        // Delete Files
+        // Delete unwanted Files
         foreach ($this->unwantedFiles as $file) {
             $this->filesystem->delete($themePath . $file);
             $this->info('Deleted: ' . $themePath . $file);
         }
 
+        dd();
         // Create new directories
         foreach ($this->wantedDirectories as $dir) {
-            $this->filesystem->makeDirectory($resourcesPath . $dir);
-            $this->info('Created: ' . $resourcesPath . $dir);
+            $this->filesystem->makeDirectory($themeResourcesPath . $dir);
+            $this->info('Created: ' . $themeResourcesPath . $dir);
         }
 
         // Copy JS files
@@ -186,7 +187,7 @@ class Create extends Command
             $DummySvgSpriteDestination = '..' . str_replace(base_path(), '', $themePath) . '/resources/views/partials/svgs.twig';
             $DummySvgSourcePath        = '.' . str_replace(base_path(), '', $themePath) . '/resources/assets/svgs/*.svg';
 
-            //$this->filesystem->makeDirectory($resourcesPath . $dir);
+            //$this->filesystem->makeDirectory($themeResourcesPath . $dir);
             // Get webpack.mix.js stub
             $webpack    = $this->filesystem->get($this->extPath . '/resources/stubs/webpack.mix.js');
 
