@@ -132,11 +132,14 @@ class Create extends Command
             $this->info('Deleted: ' . $themePath . $file);
         }
 
-        $from = $this->extPath . '/resources/stubs/barebone';
-        $to   = "{$themePath}";
+        $name = strtolower($this->choice('Choose theme?', ['Barebone'], 0));
+
+        $from = $this->extPath . '/resources/stubs/' . $name . '/resources';
+        $to   = "{$themePath}/resources";
 
         $this->filesystem->copyDirectory($from, $to);
 
+        return;
         dd();
         // Create new directories
         foreach ($this->wantedDirectories as $dir) {
@@ -144,43 +147,11 @@ class Create extends Command
             $this->info('Created: ' . $themeResourcesPath . $dir);
         }
 
-        // Copy JS files
-        $this->filesystem->copyDirectory(
-            $this->extPath . '/resources/stubs/js',
-            "{$themePath}/resources/js"
-        );
-        $this->info('Javascript files copied');
-
-        // Copy SCSS files
-        $this->filesystem->copyDirectory(
-            $this->extPath . '/resources/stubs/sass',
-            "{$themePath}/resources/sass"
-        );
-        $this->info('Sass files copied');
-
-        // Copy VIEWS files
-        $this->filesystem->copyDirectory(
-            $this->extPath . '/resources/stubs/views',
-            "{$themePath}/resources/views"
-        );
-
-        // Copy Svg files
-        $this->filesystem->copyDirectory(
-            $this->extPath . '/resources/stubs/svgs',
-            "{$themePath}/resources/assets/svgs"
-        );
-
-        // Copy Image files
-        $this->filesystem->copyDirectory(
-            $this->extPath . '/resources/stubs/images',
-            "{$themePath}/resources/images"
-        );
-
         // Copy Command files
-        $this->filesystem->copyDirectory(
-            $this->extPath . '/resources/stubs/Command',
-            "{$themePath}/src/Command"
-        );
+        // $this->filesystem->copyDirectory(
+        //     $this->extPath . '/resources/stubs/Command',
+        //     "{$themePath}/src/Command"
+        // );
 
         // Copy package.json
         $packagejson    = $this->filesystem->get($this->extPath . '/resources/stubs/package.json');
