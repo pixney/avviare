@@ -146,11 +146,13 @@ class Create extends Command
             $this->info('Deleted: ' . $themePath . $file);
         }
 
+        // Find out what kind of theme they would like to scaffold.
         $chosenScaffoldType = strtolower($this->choice('Choose theme?', $this->scaffoldingTypes, 1));
 
-        // Copy files
+        // Copy files over from the chosen scaffold. Ex: package.json and view/sass files.
         dispatch_now(new CopyFiles($this->extPath, $themePath, $chosenScaffoldType));
 
+        // Would they like our help to setup the webpack.mix.json file?
         if ($this->confirm('Would you like to have your webpack.mix.js files setup?')) {
             switch ($chosenScaffoldType) {
                 case 'bootstrap':
@@ -163,6 +165,7 @@ class Create extends Command
             }
         }
 
+        // Remind them about running npm install since we have updated the package json file for them.
         $this->comment('Now all you need to do is run : npm install');
     }
 }
