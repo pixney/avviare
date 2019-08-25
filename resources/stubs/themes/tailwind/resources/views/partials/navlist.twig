@@ -1,0 +1,20 @@
+<ul class="flex -mx-2 justify-end">
+    <li class="px-2 flex items-center h-10">
+        <a href="{{ url_to("/") }}">Home</a>
+    </li>
+    <li class="px-2 flex items-center h-10">
+        <a href="{{ url_route('anomaly.module.posts::posts.index') }}">Posts</a>
+    </li>
+    <li class="px-2 flex items-center h-10">
+        <a href="{{ url_to("contact") }}">Contact</a>
+    </li>
+    {% if auth_check() %}
+    <li class="px-2 flex items-center h-10">
+        <a href="{{ url_route('anomaly.module.users::logout') }}" class="">Logout</a>
+    </li>
+    {% else %}
+    <li class="px-2 flex items-center h-10">
+        <a href="{{ url_route('anomaly.module.users::login') }}?redirect={{ request_url() }}" class="">Login</a>
+    </li>
+    {% endif %}
+</ul>

@@ -1,5 +1,73 @@
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<title>Document</title>
+<!--
+  The following 2 meta tags *must* come first in the <head>
+  to consistently ensure proper document rendering.
+  Any other head element should come *after* these tags.
+-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>{{ trans(template.meta_title) }}</title>
+
+<!-- Locale -->
+<meta http-equiv="Content-Language" content="{{ config('app.locale') }}">
+<!-- Force IE 8/9/10 to use its latest rendering engine -->
+<meta http-equiv="x-ua-compatible" content="ie=edge,chrome=1">
+
+<!-- Theme Color for Chrome, Firefox OS and Opera -->
+<meta name="theme-color" content="#26323e">
+
+<!-- Meta Tags -->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="{{ config_get('streams::distribution.name') }}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="description" content="{{ trans(template.meta_description) | default(page.introtext) }}" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<!-- Control the behavior of search engine crawling and indexing -->
+<meta name="robots" content="index,follow"><!-- All Search Engines -->
+<meta name="googlebot" content="index,follow"><!-- Google Specific -->
+<!-- Allows control over how referrer information is passed -->
+<meta name="referrer" content="no-referrer">
+<!-- Disable automatic detection and formatting of possible phone numbers -->
+<meta name="format-detection" content="telephone=no">
+<link rel="preconnect" href="{{ url_current() }}">
+<link rel="prefetch" href="{{ url_current() }}">
+<link rel="prerender" href="{{ url_current() }}">
+
+{% block ogdata %}
+<meta property="og:site_name" content="{{ setting_value('streams::name') }}" />
+<meta property="og:description" content="{{ trans(template.meta_description) | default(page.introtext) }}" />
+<meta property="og:title" content="{{ trans(template.meta_title) | default(page.title) }}" />
+<meta property="og:url" content="{{ url_current() }}" />
+<meta property="og:image"
+    content="{{ page.ogimage.cropped().fit(1200,630).url() | default(img("theme::images/og.png").url())}}" />
+<meta property="og:type" content="website" />
+{% endblock %}
+
+{% block twitterdata %}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@yourtwitterid">
+<meta name="twitter:title" content="{{ trans(template.meta_title) | default(page.title) }}">
+<meta name="twitter:description" content="{{ trans(template.meta_description) | default(page.introtext) }}">
+<meta name="twitter:image"
+    content="{{page.og_image.cropped().fit(1200,630).url() | default(img("theme::images/og.png").url()) }}" />
+{% endblock %}
+
+
+<!-- Favicon -->
+{{ favicons("theme::images/favicon.png") }}
+
+{# <!-- Icon in the highest resolution we need it for -->
+<link rel="icon" sizes="192x192" href="/path/to/icon.png">
+
+<!-- Apple Touch Icon (reuse 192px icon.png) -->
+<link rel="apple-touch-icon" href="/path/to/apple-touch-icon.png">
+
+<!-- Safari Pinned Tab Icon -->
+<link rel="mask-icon" href="/path/to/icon.svg" color="blue"> #}
+
 <link rel="stylesheet" href="{{mix('css/theme.css')}}">
+
+
+{{ template.includes.render('head')|raw }}
+
+{# Important!! #}
+{{ constants() }}

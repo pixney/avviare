@@ -146,7 +146,7 @@ class Create extends Command
             $this->info('Deleted: ' . $themePath . $file);
         }
 
-        $chosenScaffoldType = strtolower($this->choice('Choose theme?', $this->scaffoldingTypes, 0));
+        $chosenScaffoldType = strtolower($this->choice('Choose theme?', $this->scaffoldingTypes, 1));
 
         $from = $this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/resources";
         $to   = "{$themePath}/resources";

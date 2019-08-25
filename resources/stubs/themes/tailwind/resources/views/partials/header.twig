@@ -1,21 +1,15 @@
-<header class="a-header">
-    <div class="container">
-        <div class="row">
-            <div class="col-4">
-                <a href="/">
-                    <svg class="a-logo">
-                        <use xlink:href="#logo" />
-                    </svg>
-                </a>
-            </div>
-            <div class="col-8 d-flex justify-content-end">
-                <button type="button" class="a-menubutton" @click="openNav">
-                    <svg class="a-menubutton__svg">
-                        <use xlink:href="#menu" />
-                    </svg>
-                </button>
-                {% include "theme::partials/navlist" with {'class':'-desktop'}%}
-            </div>
+<div class="container mx-auto h-10">
+    <div class="flex flex-row h-10">
+        <div class="w-1/4">
+            <a href="/">
+                <svg class="h-10">
+                    <use xlink:href="#logo" />
+                </svg>
+                Pixney
+            </a>
+        </div>
+        <div class="w-full">
+            {% include "theme::partials/navlist" with {'class':'-desktop'}%}
         </div>
     </div>
-</header>
+</div>
