@@ -13,10 +13,6 @@ let SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 let svgSourcePath = "DummySvgSourcePath";
 let svgSpriteDestination = "DummySvgSpriteDestination";
 
-
-
-
-
 mix
    .disableSuccessNotifications()
    .js('DummyAppJS', 'js')

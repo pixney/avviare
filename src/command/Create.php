@@ -148,15 +148,20 @@ class Create extends Command
 
         $chosenScaffoldType = strtolower($this->choice('Choose theme?', $this->scaffoldingTypes, 1));
 
+        // Copy files
         $from = $this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/resources";
         $to   = "{$themePath}/resources";
-
         $this->filesystem->copyDirectory($from, $to);
 
-        if ($chosenScaffoldType === 'barebone') {
-            // $this->filesystem->delete(base_path('package.json'));
-            // $file = file_get_contents($this->packageJsonUrl);
-            // $this->filesystem->put(base_path('package.json'), $file);
+        // Copy Package Json
+        $packagejson    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/package.json");
+        $this->filesystem->put(base_path('package.json'), $packagejson);
+
+        if ($this->confirm('Would you like to have your webpack.mix.js files setup?')) {
+            dispatch_now(new TailwindWebpack());
+        }
+
+        if ($chosenScaffoldType === 'bootstrap') {
             $packagejson    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/package.json");
             $this->filesystem->put(base_path('package.json'), $packagejson);
 
