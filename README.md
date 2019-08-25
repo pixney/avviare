@@ -20,7 +20,7 @@ php artisan install
 
 ### Install Avviare
 
-Within your composer.json file, add :
+Add the pixney repository to your composer.
 
 ```
 {
@@ -31,7 +31,7 @@ Within your composer.json file, add :
 }
 ```
 
-Then simply require it :
+Require it:
 
 ```
 composer require "pixney/avviare-extension"
@@ -41,8 +41,7 @@ php artisan addon:install avviare
 
 ### Create a theme
 
-Running this command, we will be scaffolding the default theme supplied by Pyrocms, and then remove and replace
-files to make sure we have a barebone theme setup the way we like it.
+Run the following command to generate the theme.
 
 ```
 php artisan avviare:create mycompany.theme.themename
@@ -52,7 +51,7 @@ _Example: pixney.theme.mytheme_
 
 ### SVG Spitemaps (svg-spritemap-webpack-plugin)
 
-If you use svgs, it's a recommended to create a svg sprite. After you have run npm install you simply place your svgs in `resources/svgs` and when you run `npm run watch/production` this plugin will create the svg sprite map for you.
+If you use svgs, it's a recommended to create a svg sprite. After you have run `npm install` you simply place your svgs in `resources/svgs` and when you run `npm run watch/production` this plugin will create the svg sprite map for you.
 
 #### Using an svg within twig files
 
@@ -86,10 +85,6 @@ Within the webpack.mix.js file, set the proxy and files to watch for:
 
 **If you don't want to use svg sprite plugin or browsersync, simply comment out or remove the reference within webpack.mix.js**
 
-### Offside JS
-
-Using an off-canvas navigation called offside.
-
 ### Styling
 
 Simple styling, just remove it and make your own..
@@ -100,7 +95,7 @@ Simple styling, just remove it and make your own..
 
 Run `npm install` from the root directory (basepath) to install all the dependencies specified in your `package.json` file.
 
-Then you can simply run your normal `npm run watch` or `npm run production` commands.
+At the end run `npm run watch` to transpile/compile everything.
 
 ### Make sure you are using the theme.
 
