@@ -15,6 +15,13 @@ use Illuminate\Filesystem\Filesystem;
 class CopyFiles
 {
     /**
+     * Path of our extension
+     *
+     * @var string
+     */
+    protected $extPath;
+
+    /**
      * Path to our created theme
      *
      * @var string
@@ -37,11 +44,12 @@ class CopyFiles
      * @param string $themePath
      * @param string $chosenScaffoldType
      */
-    public function __construct(string $themePath, string $chosenScaffoldType)
+    public function __construct(string $extPath, string $themePath, string $chosenScaffoldType)
     {
-        $this->Filesystem         = app(Filesystem::class);
+        $this->filesystem         = app(Filesystem::class);
         $this->themePath          = $themePath;
         $this->chosenScaffoldType = $chosenScaffoldType;
+        $this->extPath            = $extPath;
     }
 
     public function handle()

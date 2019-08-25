@@ -149,14 +149,7 @@ class Create extends Command
         $chosenScaffoldType = strtolower($this->choice('Choose theme?', $this->scaffoldingTypes, 1));
 
         // Copy files
-        dispatch_now(new CopyFiles($themePath, $chosenScaffoldType));
-        // $from = $this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/resources";
-        // $to   = "{$themePath}/resources";
-        // $this->filesystem->copyDirectory($from, $to);
-
-        // // Copy Package Json
-        // $packagejson    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/package.json");
-        // $this->filesystem->put(base_path('package.json'), $packagejson);
+        dispatch_now(new CopyFiles($this->extPath, $themePath, $chosenScaffoldType));
 
         if ($this->confirm('Would you like to have your webpack.mix.js files setup?')) {
             switch ($chosenScaffoldType) {

@@ -40,7 +40,7 @@ class BootstrapWebpack
      */
     protected $filesystem;
 
-    public function __construct($extPath, $themePath, $chosenScaffoldType)
+    public function __construct(string $extPath, string $themePath, string $chosenScaffoldType)
     {
         $this->themePath          = $themePath;
         $this->chosenScaffoldType = $chosenScaffoldType;
