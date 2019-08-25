@@ -71,7 +71,7 @@ class DeleteUnwantedAssets
         $this->themeResourcesPath = $themeResourcesPath;
     }
 
-    public function handle()
+    public function handle():array
     {
         // Delete unwanted directories
         foreach ($this->unwantedDirectories as $dir) {

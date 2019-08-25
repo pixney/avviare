@@ -15,18 +15,18 @@ use Illuminate\Filesystem\Filesystem;
 class BootstrapWebpack
 {
     /**
-     * Path to our created theme
-     *
-     * @var string
-     */
-    protected $themePath;
-
-    /**
      * Path of our extension
      *
      * @var string
      */
     protected $extPath;
+
+    /**
+     * Path to our created theme
+     *
+     * @var string
+     */
+    protected $themePath;
 
     /**
      * The type of scaffold chosen
@@ -40,11 +40,16 @@ class BootstrapWebpack
      */
     protected $filesystem;
 
+    /**
+     * @param string $extPath
+     * @param string $themePath
+     * @param string $chosenScaffoldType
+     */
     public function __construct(string $extPath, string $themePath, string $chosenScaffoldType)
     {
+        $this->extPath            = $extPath;
         $this->themePath          = $themePath;
         $this->chosenScaffoldType = $chosenScaffoldType;
-        $this->extPath            = $extPath;
         $this->filesystem         = app(Filesystem::class);
     }
 

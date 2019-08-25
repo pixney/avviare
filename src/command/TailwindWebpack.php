@@ -15,6 +15,13 @@ use Illuminate\Filesystem\Filesystem;
 class TailwindWebpack
 {
     /**
+     * Path of our extension
+     *
+     * @var string
+     */
+    protected $extPath;
+
+    /**
      * Path to our created theme
      *
      * @var string
@@ -28,8 +35,14 @@ class TailwindWebpack
      */
     protected $chosenScaffoldType;
 
-    public function __construct($themePath, $chosenScaffoldType)
+    /**
+     * @param string $extPath
+     * @param string $themePath
+     * @param string $chosenScaffoldType
+     */
+    public function __construct(string $extPath, string $themePath, string $chosenScaffoldType)
     {
+        $this->extPath            = $extPath;
         $this->themePath          = $themePath;
         $this->chosenScaffoldType = $chosenScaffoldType;
         $this->filesystem         = app(Filesystem::class);

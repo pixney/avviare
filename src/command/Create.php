@@ -118,6 +118,6 @@ class Create extends Command
         }
 
         // Remind them about running npm install since we have updated the package json file for them.
-        $this->comment('Now all you need to do is run : npm install');
+        $this->comment('Run npm install and you are all done.');
     }
 }

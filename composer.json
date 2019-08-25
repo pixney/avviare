@@ -1,12 +1,17 @@
 {
     "name": "pixney/avviare-extension",
     "type": "streams-addon",
-    "description": "Scaffold a barebone pyrocms theme",
+    "description": "Theme setup generator for PyroCMS",
     "keywords": [
-        "pyrocms", 
+        "pyrocms",
         "theme",
         "avviare",
-        "extension"
+        "extension",
+        "tailwindcss",
+        "tailwind",
+        "bootstrap",
+        "vue",
+        "vuejs"
     ],
     "require": {
         "anomaly/streams-platform": "^1.7",
@@ -26,7 +31,6 @@
             "role": "Developer"
         }
     ],
-    
     "autoload": {
         "psr-4": {
             "Pixney\\AvviareExtension\\": "src/"
