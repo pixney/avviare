@@ -1,0 +1,21 @@
+<header class="a-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <a href="/">
+                    <svg class="a-logo">
+                        <use xlink:href="#logo" />
+                    </svg>
+                </a>
+            </div>
+            <div class="col-8 d-flex justify-content-end">
+                <button type="button" class="a-menubutton" @click="openNav">
+                    <svg class="a-menubutton__svg">
+                        <use xlink:href="#menu" />
+                    </svg>
+                </button>
+                {% include "theme::partials/navlist" with {'class':'-desktop'}%}
+            </div>
+        </div>
+    </div>
+</header>

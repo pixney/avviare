@@ -1,0 +1,23 @@
+{% if template.breadcrumbs.count() %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <ul class="m-breadcrumb">
+                {% for breadcrumb, href in template.breadcrumbs %}
+                {% if loop.last ? 'active' %}
+                <li class="m-breadcrumb__item -active">
+                    {{ trans(breadcrumb) }}
+                </li>
+                {% else %}
+                <li class="m-breadcrumb__item">
+                    <a href="{{ href }}">
+                        {{ trans(breadcrumb) }}
+                    </a>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endif %}
