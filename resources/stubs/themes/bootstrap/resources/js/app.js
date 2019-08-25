@@ -1,5 +1,5 @@
 import ExampleComponent from './components/ExampleComponent.vue';
-import {Nav,Messages} from './mixins/themeMixins'
+
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -32,7 +32,7 @@ Vue.component('example-component', ExampleComponent);
 
 const app = new Vue({
   el: '#app',
-  mixins:[Nav,Messages],
+  mixins: [Nav, Messages],
 });
 
 
