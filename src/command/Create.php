@@ -149,97 +149,26 @@ class Create extends Command
         $chosenScaffoldType = strtolower($this->choice('Choose theme?', $this->scaffoldingTypes, 1));
 
         // Copy files
-        $from = $this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/resources";
-        $to   = "{$themePath}/resources";
-        $this->filesystem->copyDirectory($from, $to);
+        dispatch_now(new CopyFiles($themePath, $chosenScaffoldType));
+        // $from = $this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/resources";
+        // $to   = "{$themePath}/resources";
+        // $this->filesystem->copyDirectory($from, $to);
 
-        // Copy Package Json
-        $packagejson    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/package.json");
-        $this->filesystem->put(base_path('package.json'), $packagejson);
+        // // Copy Package Json
+        // $packagejson    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/package.json");
+        // $this->filesystem->put(base_path('package.json'), $packagejson);
 
         if ($this->confirm('Would you like to have your webpack.mix.js files setup?')) {
-            dispatch_now(new TailwindWebpack());
-        }
+            switch ($chosenScaffoldType) {
+                case 'bootstrap':
+                    dispatch_now(new BootstrapWebpack($this->extPath, $themePath, $chosenScaffoldType));
+                break;
 
-        if ($chosenScaffoldType === 'bootstrap') {
-            $packagejson    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/package.json");
-            $this->filesystem->put(base_path('package.json'), $packagejson);
-
-            if ($this->confirm('Would you like us to automatically set your webpack.mix.js file?')) {
-                $jsPath                    = '.' . str_replace(base_path(), '', $themePath) . '/resources/js/app.js';
-                $cssPath                   = '.' . str_replace(base_path(), '', $themePath) . '/resources/sass/theme.scss';
-                $DummySvgSpriteDestination = '..' . str_replace(base_path(), '', $themePath) . '/resources/views/partials/svgs.twig';
-                $DummySvgSourcePath        = '.' . str_replace(base_path(), '', $themePath) . '/resources/assets/svgs/*.svg';
-
-                //$this->filesystem->makeDirectory($themeResourcesPath . $dir);
-                // Get webpack.mix.js stub
-                $webpack    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/webpack.mix.js");
-
-                $webpack    = str_replace('DummyAppJS', $jsPath, $webpack);
-                $webpack    = str_replace('DummyAppCSS', $cssPath, $webpack);
-                $webpack    = str_replace('DummySvgSpriteDestination', $DummySvgSpriteDestination, $webpack);
-                $webpack    = str_replace('DummySvgSourcePath', $DummySvgSourcePath, $webpack);
-
-                $this->filesystem->put(base_path('webpack.mix.js'), $webpack);
+                case 'tailwind':
+                    dispatch_now(new TailwindWebpack($this->extPath, $themePath, $chosenScaffoldType));
+                break;
             }
         }
-
-        if ($chosenScaffoldType === 'tailwind') {
-            // Copy over package json file.
-            $packagejson    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/package.json");
-            $this->filesystem->put(base_path('package.json'), $packagejson);
-
-            if ($this->confirm('Would you like us to automatically set your webpack.mix.js file?')) {
-                // Set path variables
-                $pathToScssFile     = '.' . str_replace(base_path(), '', $themePath) . '/resources/sass/theme.scss';
-                $pathToTailwindConf = '.' . str_replace(base_path(), '', $themePath) . '/resources/sass/tailwind.config.js';
-
-                // Get webpack.mix.js stub
-                $webpack    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/webpack.mix.js");
-                $webpack    = str_replace('DummyAppCSS', $pathToScssFile, $webpack);
-                $webpack    = str_replace('DummyTailwindConfPath', $pathToTailwindConf, $webpack);
-                $this->filesystem->put(base_path('webpack.mix.js'), $webpack);
-
-                //     $jsPath                    = '.' . str_replace(base_path(), '', $themePath) . '/resources/js';
-                //     $webpack    = str_replace('DummyAppJS', $jsPath, $webpack);
-            }
-        }
-
-        // Copy Command files
-        // $this->filesystem->copyDirectory(
-        //     $this->extPath . '/resources/stubs/Command',
-        //     "{$themePath}/src/Command"
-        // );
-
-        //$packagejson    = $this->filesystem->get($this->extPath . '/resources/stubs/package.json');
-        //$this->filesystem->put(base_path('package.json'), $packagejson);
-
-        // if ($this->confirm('Would you like us to automatically set your webpack.mix.js file?')) {
-        //     $jsPath                    = '.' . str_replace(base_path(), '', $themePath) . '/resources/js/app.js';
-        //     $cssPath                   = '.' . str_replace(base_path(), '', $themePath) . '/resources/sass/theme.scss';
-        //     $DummySvgSpriteDestination = '..' . str_replace(base_path(), '', $themePath) . '/resources/views/partials/svgs.twig';
-        //     $DummySvgSourcePath        = '.' . str_replace(base_path(), '', $themePath) . '/resources/assets/svgs/*.svg';
-
-        //     //$this->filesystem->makeDirectory($themeResourcesPath . $dir);
-        //     // Get webpack.mix.js stub
-        //     $webpack    = $this->filesystem->get($this->extPath . "/resources/stubs/{$chosenScaffoldType}/webpack.mix.js");
-
-        //     $webpack    = str_replace('DummyAppJS', $jsPath, $webpack);
-        //     $webpack    = str_replace('DummyAppCSS', $cssPath, $webpack);
-        //     $webpack    = str_replace('DummySvgSpriteDestination', $DummySvgSpriteDestination, $webpack);
-        //     $webpack    = str_replace('DummySvgSourcePath', $DummySvgSourcePath, $webpack);
-
-        //     $this->filesystem->put(base_path('webpack.mix.js'), $webpack);
-        // }
-
-        // if ($this->confirm('Would you like to replace the existing package.json file with the current one used by laravel?')) {
-        //     // Delete webpack
-        //     $this->filesystem->delete(base_path('package.json'));
-        //     // Copy webpack
-        //     //$this->filesystem->copy($this->extPath . '/resources/stubs/package.json', base_path('package.json'));
-        //     $file = file_get_contents($this->packageJsonUrl);
-        //     $this->filesystem->put(base_path('package.json'), $file);
-        // }
 
         $this->comment('Now all you need to do is run : npm install');
     }
