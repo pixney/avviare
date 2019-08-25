@@ -1,0 +1,17 @@
+<footer>
+    <div class="container mx-auto">
+        <div class="flex flex-wrap">
+            <div class="w-full">
+                <p>
+                    &copy;{{ 'now'|date('Y') }}
+                    {{ setting_value('streams::name', config_get('streams::distribution.name')) }}.
+                </p>
+                <p>
+                    <small>
+                        <a href="https://pixney.com">Swedish Digital Agency Pixney AB.</a>
+                    </small>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
