@@ -35,41 +35,6 @@ class Create extends Command
     protected $namespace      = '';
 
     /**
-     * Directories we dont want
-     *
-     * @var array
-     */
-    protected $unwantedDirectories = [
-        'js',
-        'fonts',
-        'scss',
-        'sass',
-        'views',
-        'css'
-    ];
-
-    /**
-     * Files we don't want
-     *
-     * @var array
-     */
-    protected $unwantedFiles = [
-        '/webpack.mix.js',
-        '/package.json'
-    ];
-
-    /**
-     * Undocumented variable
-     *
-     * @var array
-     */
-    protected $wantedDirectories = [
-        'sass',
-        'js',
-        'views'
-    ];
-
-    /**
      * Path to our installed extension
      *
      * @var string
@@ -128,22 +93,16 @@ class Create extends Command
 
         $themePath                 = $this->dispatch(new MakeAddonPaths($vendor, $type, $slug, $this));
         $type                      = str_singular($type);
-        $themeResourcesPath        = $themePath . '/resources/';
 
         $this->call('make:addon', [
             'namespace' => $this->namespace
         ]);
 
-        // Delete unwanted directories
-        foreach ($this->unwantedDirectories as $dir) {
-            $this->filesystem->deleteDirectory($themeResourcesPath . $dir);
-            $this->info('Deleted: ' . $themeResourcesPath . $dir);
-        }
-
-        // Delete unwanted Files
-        foreach ($this->unwantedFiles as $file) {
-            $this->filesystem->delete($themePath . $file);
-            $this->info('Deleted: ' . $themePath . $file);
+        // Delete unwanted assets brought in by pyrocms theme scaffolding.
+        $themeResourcesPath        = $themePath . '/resources/';
+        $deletedInformation        = dispatch_now(new DeleteUnwantedAssets($themeResourcesPath, $themePath));
+        foreach ($deletedInformation as $msg) {
+            $this->info($msg);
         }
 
         // Find out what kind of theme they would like to scaffold.
