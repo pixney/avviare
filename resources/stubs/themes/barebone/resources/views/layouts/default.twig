@@ -1,33 +1,16 @@
 {% htmlcompress %}
 <!doctype html>
-
-<!--[if lt IE 7]>
-<html class="nojs ms lt_ie7" lang="en"><![endif]-->
-<!--[if IE 7]>
-<html class="nojs ms ie7" lang="en"><![endif]-->
-<!--[if IE 8]>
-<html class="nojs ms ie8" lang="en"><![endif]-->
-<!--[if gt IE 8]>
-<html class="nojs ms" lang="en"><![endif]-->
-
 <html>
-
 <head>
     {% include "theme::partials/metadata" %}
 </head>
-
 <body>
-
     <div id="app">
         {% include "theme::partials/messages" %}
         {% include "theme::partials/mobileNavigation" %}
-
-
         <main ref="content">
             {% include "theme::partials/header" %}
             {% include "theme::partials/breadcrumbs" %}
-            
-
             <div class="container">
                 <div class="row">
                     <div class="col-12">
@@ -35,20 +18,10 @@
                     </div>
                 </div>
             </div>
-            
-            {#% if (request_path() == '/') %}
-            {% include "theme::partials/posts" %}
-            {% endif %#}
-
             {% include "theme::partials/footer" %}
-
         </main>
-
     </div>
-
-
     {% include "theme::partials/assets" %}
-
 </body>
 
 </html>
