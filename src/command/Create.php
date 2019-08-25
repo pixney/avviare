@@ -88,7 +88,7 @@ class Create extends Command
      *
      * @var array
      */
-    protected $scaffoldingTypes=['Barebone', 'Tailwind', 'Editorial'];
+    protected $scaffoldingTypes=['Barebone', 'Tailwind'];
 
     /**
      * Create a new command instance.
@@ -157,7 +157,7 @@ class Create extends Command
             // $this->filesystem->delete(base_path('package.json'));
             // $file = file_get_contents($this->packageJsonUrl);
             // $this->filesystem->put(base_path('package.json'), $file);
-            $packagejson    = $this->filesystem->get($this->extPath . "/resources/stubs/{$chosenScaffoldType}/package.json");
+            $packagejson    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/package.json");
             $this->filesystem->put(base_path('package.json'), $packagejson);
 
             if ($this->confirm('Would you like us to automatically set your webpack.mix.js file?')) {
@@ -180,13 +180,14 @@ class Create extends Command
         }
 
         if ($chosenScaffoldType === 'tailwind') {
-            $packagejson    = $this->filesystem->get($this->extPath . "/resources/stubs/{$chosenScaffoldType}/package.json");
+            // Copy over package json file.
+            $packagejson    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/package.json");
             $this->filesystem->put(base_path('package.json'), $packagejson);
 
             if ($this->confirm('Would you like us to automatically set your webpack.mix.js file?')) {
                 // Set path variables
                 $pathToScssFile     = '.' . str_replace(base_path(), '', $themePath) . '/resources/sass/theme.scss';
-                $pathToTailwindConf = '.' . str_replace(base_path(), '', $themePath) . '/resources/tailwind.config.js';
+                $pathToTailwindConf = '.' . str_replace(base_path(), '', $themePath) . '/resources/sass/tailwind.config.js';
 
                 // Get webpack.mix.js stub
                 $webpack    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/webpack.mix.js");

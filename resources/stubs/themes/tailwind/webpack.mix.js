@@ -16,7 +16,7 @@ mix
   .sass('DummyAppCSS', 'css')
   .options({
     processCssUrls: false,
-    postCss: [tailwindcss(DummyTailwindConfPath)],
+    postCss: [tailwindcss("DummyTailwindConfPath")],
   })
   .sourceMaps().version();
 
