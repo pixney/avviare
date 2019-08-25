@@ -88,7 +88,7 @@ class Create extends Command
      *
      * @var array
      */
-    protected $scaffoldingTypes=['Barebone', 'Tailwind'];
+    protected $scaffoldingTypes=['Bootstrap', 'Tailwind'];
 
     /**
      * Create a new command instance.

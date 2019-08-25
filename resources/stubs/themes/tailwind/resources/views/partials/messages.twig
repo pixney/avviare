@@ -1,0 +1,12 @@
+{% if message_exists('success') %}
+{% include "theme::partials/message" with {'messages':message_get('success'),'type':'success'} %}
+{% endif %}
+{% if message_exists('info') %}
+{% include "theme::partials/message" with {'messages':message_get('info'),'type':'info'} %}
+{% endif %}
+{% if message_exists('warning') %}
+{% include "theme::partials/message" with {'messages':message_get('warning'),'type':'warning'} %}
+{% endif %}
+{% if message_exists('error') %}
+{% include "theme::partials/message" with {'messages':message_get('error'),'type':'error'} %}
+{% endif %}

@@ -4,13 +4,12 @@ namespace Pixney\AvviareExtension\Command;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Pixney\AvviareExtension\AvviareExtension;
 use Anomaly\Streams\Platform\Application\Application;
 use Anomaly\Streams\Platform\Addon\Console\Command\MakeAddonPaths;
 
-class CopyViews extends Command
+class Create extends Command
 {
     use DispatchesJobs;
 
@@ -26,43 +25,28 @@ class CopyViews extends Command
      *
      * @var string
      */
-    protected $description    = 'Copy Views';
+    protected $description    = 'Copy views only';
 
     /**
-     * Undocumented variable
+     * Theme namespace
      *
      * @var string
      */
     protected $namespace      = '';
+
     /**
-     * Undocumented variable
+     * Path to our installed extension
+     *
+     * @var string
+     */
+    protected $extPath;
+
+    /**
+     * Various types of scaffolding options.
      *
      * @var array
      */
-    protected $deleteDirs = [
-        'js',
-        'fonts',
-        'scss',
-        'sass',
-        'views',
-        'css'
-    ];
-
-    /**
-     * Undocumented variable
-     *
-     * @var array
-     */
-    protected $createDirs = [
-        'sass',
-        'js',
-        'views'
-    ];
-
-    protected $deleteFiles = [
-        '/webpack.mix.js',
-        '/package.json'
-    ];
+    protected $scaffoldingTypes=['Bootstrap', 'Tailwind'];
 
     /**
      * Create a new command instance.
@@ -72,6 +56,8 @@ class CopyViews extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->filesystem        = app(Filesystem::class);
+        $this->extPath           = app(AvviareExtension::class)->path;
     }
 
     /**
@@ -79,7 +65,7 @@ class CopyViews extends Command
      *
      * @return mixed
      */
-    public function handle(Filesystem $filesystem, Application $application, AvviareExtension $ext)
+    public function handle(Application $application, AvviareExtension $ext)
     {
         $this->namespace            = $this->argument('theme');
 
@@ -94,125 +80,108 @@ class CopyViews extends Command
             explode('.', $this->namespace)
         );
 
-        $path                 = $this->dispatch(new MakeAddonPaths($vendor, $type, $slug, $this));
-        $type                 = str_singular($type);
-        $avviarePath          = $ext->path;
-        $resourcesPath        = $path . '/resources/';
+        if ($type !== 'theme') {
+            throw new \Exception('The type has to be theme.');
+        }
 
-        // Copy views over
+        $themePath                 = $this->dispatch(new MakeAddonPaths($vendor, $type, $slug, $this));
+        $type                      = str_singular($type);
+        $themeResourcesPath        = $themePath . '/resources/';
 
-        // Copy VIEWS files
-        $filesystem->copyDirectory(
-            $avviarePath . '/resources/stubs/views',
-            "{$path}/resources/views"
-        );
-        $this->comment('You successfully copied all views');
+        $this->call('make:addon', [
+            'namespace' => $this->namespace
+        ]);
 
-        // // Copy SCSS files
-        $filesystem->copyDirectory(
-            $avviarePath . '/resources/stubs/sass',
-            "{$path}/resources/sass"
-        );
-        $this->info('Sass files copied');
+        $chosenScaffoldType = strtolower($this->choice('Choose theme?', $this->scaffoldingTypes, 0));
 
-        // // Copy Svg files
-        $filesystem->copyDirectory(
-            $avviarePath . '/resources/stubs/svgs',
-            "{$path}/resources/assets/svgs"
-        );
+        $from = $this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/resources";
+        $to   = "{$themePath}/resources";
 
-        // Copy JS files
-        $filesystem->copyDirectory(
-            $avviarePath . '/resources/stubs/js',
-            "{$path}/resources/js"
-        );
-        $this->info('Javascript files copied');
+        $this->filesystem->copyDirectory($from, $to);
 
-        // dd($path);
+        if ($chosenScaffoldType === 'barebone') {
+            // $this->filesystem->delete(base_path('package.json'));
+            // $file = file_get_contents($this->packageJsonUrl);
+            // $this->filesystem->put(base_path('package.json'), $file);
+            $packagejson    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/package.json");
+            $this->filesystem->put(base_path('package.json'), $packagejson);
 
-        // Artisan::call('make:addon', [
-        //     'namespace' => $this->namespace
-        // ]);
+            if ($this->confirm('Would you like us to automatically set your webpack.mix.js file?')) {
+                $jsPath                    = '.' . str_replace(base_path(), '', $themePath) . '/resources/js/app.js';
+                $cssPath                   = '.' . str_replace(base_path(), '', $themePath) . '/resources/sass/theme.scss';
+                $DummySvgSpriteDestination = '..' . str_replace(base_path(), '', $themePath) . '/resources/views/partials/svgs.twig';
+                $DummySvgSourcePath        = '.' . str_replace(base_path(), '', $themePath) . '/resources/assets/svgs/*.svg';
 
-        // // Delete directories
-        // foreach ($this->deleteDirs as $dir) {
-        //     $filesystem->deleteDirectory($resourcesPath . $dir);
-        //     $this->info('Deleted: ' . $resourcesPath . $dir);
-        // }
+                //$this->filesystem->makeDirectory($themeResourcesPath . $dir);
+                // Get webpack.mix.js stub
+                $webpack    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/webpack.mix.js");
 
-        // // Delete Files
-        // foreach ($this->deleteFiles as $file) {
-        //     $filesystem->delete($path . $file);
-        //     $this->info('Deleted: ' . $path . $file);
-        // }
+                $webpack    = str_replace('DummyAppJS', $jsPath, $webpack);
+                $webpack    = str_replace('DummyAppCSS', $cssPath, $webpack);
+                $webpack    = str_replace('DummySvgSpriteDestination', $DummySvgSpriteDestination, $webpack);
+                $webpack    = str_replace('DummySvgSourcePath', $DummySvgSourcePath, $webpack);
 
-        // // Create new directories
-        // foreach ($this->createDirs as $dir) {
-        //     $filesystem->makeDirectory($resourcesPath . $dir);
-        //     $this->info('Created: ' . $resourcesPath . $dir);
-        // }
+                $this->filesystem->put(base_path('webpack.mix.js'), $webpack);
+            }
+        }
 
-        // // Copy JS files
-        // $filesystem->copyDirectory(
-        //     $avviarePath . '/resources/stubs/js',
-        //     "{$path}/resources/js"
-        // );
-        // $this->info('Javascript files copied');
+        if ($chosenScaffoldType === 'tailwind') {
+            // Copy over package json file.
+            $packagejson    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/package.json");
+            $this->filesystem->put(base_path('package.json'), $packagejson);
 
-        // // Copy SCSS files
-        // $filesystem->copyDirectory(
-        //     $avviarePath . '/resources/stubs/sass',
-        //     "{$path}/resources/sass"
-        // );
-        // $this->info('Sass files copied');
+            if ($this->confirm('Would you like us to automatically set your webpack.mix.js file?')) {
+                // Set path variables
+                $pathToScssFile     = '.' . str_replace(base_path(), '', $themePath) . '/resources/sass/theme.scss';
+                $pathToTailwindConf = '.' . str_replace(base_path(), '', $themePath) . '/resources/sass/tailwind.config.js';
 
-        // // Copy VIEWS files
-        // $filesystem->copyDirectory(
-        //     $avviarePath . '/resources/stubs/views',
-        //     "{$path}/resources/views"
+                // Get webpack.mix.js stub
+                $webpack    = $this->filesystem->get($this->extPath . "/resources/stubs/themes/{$chosenScaffoldType}/webpack.mix.js");
+                $webpack    = str_replace('DummyAppCSS', $pathToScssFile, $webpack);
+                $webpack    = str_replace('DummyTailwindConfPath', $pathToTailwindConf, $webpack);
+                $this->filesystem->put(base_path('webpack.mix.js'), $webpack);
+
+                //     $jsPath                    = '.' . str_replace(base_path(), '', $themePath) . '/resources/js';
+                //     $webpack    = str_replace('DummyAppJS', $jsPath, $webpack);
+            }
+        }
+
+        // Copy Command files
+        // $this->filesystem->copyDirectory(
+        //     $this->extPath . '/resources/stubs/Command',
+        //     "{$themePath}/src/Command"
         // );
 
-        // // Copy Svg files
-        // $filesystem->copyDirectory(
-        //     $avviarePath . '/resources/stubs/svgs',
-        //     "{$path}/resources/assets/svgs"
-        // );
-
-        // // Copy Image files
-        // $filesystem->copyDirectory(
-        //     $avviarePath . '/resources/stubs/images',
-        //     "{$path}/resources/images"
-        // );
-
-        // // Copy package.json
-        // $packagejson    = $filesystem->get($avviarePath . '/resources/stubs/package.json');
-        // $filesystem->put(base_path('package.json'), $packagejson);
+        //$packagejson    = $this->filesystem->get($this->extPath . '/resources/stubs/package.json');
+        //$this->filesystem->put(base_path('package.json'), $packagejson);
 
         // if ($this->confirm('Would you like us to automatically set your webpack.mix.js file?')) {
-        //     $jsPath                    = '.' . str_replace(base_path(), '', $path) . '/resources/js/app.js';
-        //     $cssPath                   = '.' . str_replace(base_path(), '', $path) . '/resources/sass/theme.scss';
-        //     $DummySvgSpriteDestination = '..' . str_replace(base_path(), '', $path) . '/resources/views/partials/svgs.twig';
-        //     $DummySvgSourcePath        = '.' . str_replace(base_path(), '', $path) . '/resources/assets/svgs/*.svg';
+        //     $jsPath                    = '.' . str_replace(base_path(), '', $themePath) . '/resources/js/app.js';
+        //     $cssPath                   = '.' . str_replace(base_path(), '', $themePath) . '/resources/sass/theme.scss';
+        //     $DummySvgSpriteDestination = '..' . str_replace(base_path(), '', $themePath) . '/resources/views/partials/svgs.twig';
+        //     $DummySvgSourcePath        = '.' . str_replace(base_path(), '', $themePath) . '/resources/assets/svgs/*.svg';
 
-        //     //$filesystem->makeDirectory($resourcesPath . $dir);
+        //     //$this->filesystem->makeDirectory($themeResourcesPath . $dir);
         //     // Get webpack.mix.js stub
-        //     $webpack    = $filesystem->get($avviarePath . '/resources/stubs/webpack.mix.js');
+        //     $webpack    = $this->filesystem->get($this->extPath . "/resources/stubs/{$chosenScaffoldType}/webpack.mix.js");
 
         //     $webpack    = str_replace('DummyAppJS', $jsPath, $webpack);
         //     $webpack    = str_replace('DummyAppCSS', $cssPath, $webpack);
         //     $webpack    = str_replace('DummySvgSpriteDestination', $DummySvgSpriteDestination, $webpack);
         //     $webpack    = str_replace('DummySvgSourcePath', $DummySvgSourcePath, $webpack);
 
-        //     $filesystem->put(base_path('webpack.mix.js'), $webpack);
+        //     $this->filesystem->put(base_path('webpack.mix.js'), $webpack);
         // }
 
         // if ($this->confirm('Would you like to replace the existing package.json file with the current one used by laravel?')) {
         //     // Delete webpack
-        //     $filesystem->delete(base_path('package.json'));
+        //     $this->filesystem->delete(base_path('package.json'));
         //     // Copy webpack
-        //     //$filesystem->copy($avviarePath . '/resources/stubs/package.json', base_path('package.json'));
+        //     //$this->filesystem->copy($this->extPath . '/resources/stubs/package.json', base_path('package.json'));
         //     $file = file_get_contents($this->packageJsonUrl);
-        //     $filesystem->put(base_path('package.json'), $file);
+        //     $this->filesystem->put(base_path('package.json'), $file);
         // }
+
+        $this->comment('Now all you need to do is run : npm install');
     }
 }
