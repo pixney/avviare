@@ -42,13 +42,6 @@ class Create extends Command
     protected $extPath;
 
     /**
-     * Package json file to download
-     *
-     * @var [type]
-     */
-    protected $packageJsonUrl='https://raw.githubusercontent.com/laravel/laravel/v5.8.16/package.json';
-
-    /**
      * Various types of scaffolding options.
      *
      * @var array
